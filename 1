@@ -1,0 +1,27 @@
+# Import the necessary libraries
+import re
+import itertools
+
+# Define a function to find the reverse complement of a DNA sequence
+def reverse_complement(sequence):
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+    return ''.join([complement[base] for base in sequence[::-1]])
+
+# Read in a DNA sequence from a FASTA file
+with open('sequence.fasta', 'r') as f:
+    lines = f.readlines()
+
+# Extract the sequence from the FASTA file
+sequence = ''.join([line.strip() for line in lines[1:]])
+
+# Find all subsequences of the DNA sequence that are 6 bases long
+subsequences = [sequence[i:i+6] for i in range(len(sequence)-5)]
+
+# Find the reverse complements of all subsequences
+reverse_complements = [reverse_complement(subsequence) for subsequence in subsequences]
+
+# Find all pairs of subsequences and their reverse complements that are the same
+matches = [subsequence for (subsequence, reverse_complement) in itertools.zip_longest(subsequences, reverse_complements) if subsequence == reverse_complement]
+
+# Print the number of matches found
+print(f'Found {len(matches)} matches')
