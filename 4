@@ -1,0 +1,29 @@
+# Import the necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+# Load the data into a Pandas dataframe
+df = pd.read_csv('data.csv')
+
+# Split the data into features and labels
+X = df.drop(columns='disease')
+y = df['disease']
+
+# Split the data into a training set and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train a random forest classifier on the training data
+clf = RandomForestClassifier()
+clf.fit(X_train, y_train)
+
+# Make predictions on the test data
+predictions = clf.predict(X_test)
+
+# Calculate the accuracy of the model
+accuracy = sum(predictions == y_test) / len(y_test)
+print(f'Model accuracy: {accuracy:.2f}')
+
+# Print the feature importances to see which gene expressions are most important for predicting the disease
+for (feature, importance) in zip(X.columns, clf.feature_importances_):
+    print(f'{feature}: {importance:.2f}')
