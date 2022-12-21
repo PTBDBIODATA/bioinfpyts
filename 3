@@ -1,0 +1,30 @@
+# Import the necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Load the data into a Pandas dataframe
+df = pd.read_csv('data.csv')
+
+# Split the data into features and labels
+X = df['sequence']
+y = df['function']
+
+# Convert the protein sequences into numerical features using a CountVectorizer
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(X)
+
+# Split the data into a training set and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train a random forest classifier on the training data
+clf = RandomForestClassifier()
+clf.fit(X_train, y_train)
+
+# Make predictions on the test data
+predictions = clf.predict(X_test)
+
+# Calculate the accuracy of the model
+accuracy = sum(predictions == y_test) / len(y_test)
+print(f'Model accuracy: {accuracy:.2f}')
