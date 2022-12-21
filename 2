@@ -1,0 +1,16 @@
+# Import the necessary libraries
+import Bio
+from Bio import SeqIO
+from Bio.SeqUtils import GC
+
+# Read in a list of DNA sequences from a FASTA file
+sequences = list(SeqIO.parse("sequences.fasta", "fasta"))
+
+# Iterate through the sequences and calculate the GC content of each one
+for seq in sequences:
+    gc_content = GC(seq.seq)
+    print(f"GC content of {seq.id}: {gc_content:.2f}")
+
+# Find the sequence with the highest GC content
+highest_gc = max(sequences, key=lambda x: GC(x.seq))
+print(f"Sequence with highest GC content: {highest_gc.id} ({GC(highest_gc.seq):.2f})")
