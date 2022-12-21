@@ -1,0 +1,60 @@
+# Import the necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+# Load the data into a Pandas dataframe
+df = pd.read_csv('data.csv')
+
+# Split the data into features and labels
+X = df.drop(columns='phenotype')
+y = df['phenotype']
+
+# Split the data into a training set and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train a logistic regression model on the training data
+logistic_reg = LogisticRegression()
+logistic_reg.fit(X_train, y_train)
+
+# Make predictions on the test data using the logistic regression model
+logistic_predictions = logistic_reg.predict(X_test)
+
+# Calculate the accuracy of the logistic regression model
+logistic_accuracy = accuracy_score(y_test, logistic_predictions)
+print(f'Logistic Regression accuracy: {logistic_accuracy:.2f}')
+
+# Train a random forest classifier on the training data
+random_forest = RandomForestClassifier()
+random_forest.fit(X_train, y_train)
+
+# Make predictions on the test data using the random forest classifier
+random_forest_predictions = random_forest.predict(X_test)
+
+# Calculate the accuracy of the random forest classifier
+random_forest_accuracy = accuracy_score(y_test, random_forest_predictions)
+print(f'Random Forest accuracy: {random_forest_accuracy:.2f}')
+
+# Train a support vector machine on the training data
+svm = SVC()
+svm.fit(X_train, y_train)
+
+# Make predictions on the test data using the support vector machine
+svm_predictions = svm.predict(X_test)
+
+# Calculate the accuracy of the support vector machine
+svm_accuracy = accuracy_score(y_test, svm_predictions)
+print(f'Support Vector Machine accuracy: {svm_accuracy:.2f}')
+
+# Find the model with the highest accuracy
+best_model = max(logistic_accuracy, random_forest_accuracy, svm_accuracy)
+
+if best_model == logistic_accuracy:
+    print('Logistic Regression is the best model')
+elif best_model == random_forest_accuracy:
+    print('Random Forest is the best model')
+else:
+    print('Support Vector Machine is the best model')
