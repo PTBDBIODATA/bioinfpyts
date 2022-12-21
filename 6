@@ -1,0 +1,56 @@
+# Import the necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+
+# Load the data into a Pandas dataframe
+df = pd.read_csv('data.csv')
+
+# Split the data into features and labels
+X = df.drop(columns='phenotype')
+y = df['phenotype']
+
+# Split the data into a training set and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train a random forest classifier on the training data
+rf_clf = RandomForestClassifier()
+rf_clf.fit(X_train, y_train)
+
+# Make predictions on the test data using the random forest classifier
+rf_predictions = rf_clf.predict(X_test)
+
+# Calculate the accuracy of the random forest classifier
+rf_accuracy = accuracy_score(y_test, rf_predictions)
+
+# Train a support vector machine classifier on the training data
+svm_clf = SVC()
+svm_clf.fit(X_train, y_train)
+
+# Make predictions on the test data using the SVM classifier
+svm_predictions = svm_clf.predict(X_test)
+
+# Calculate the accuracy of the SVM classifier
+svm_accuracy = accuracy_score(y_test, svm_predictions)
+
+# Train a k-nearest neighbors classifier on the training data
+knn_clf = KNeighborsClassifier()
+knn_clf.fit(X_train, y_train)
+
+# Make predictions on the test data using the k-NN classifier
+knn_predictions = knn_clf.predict(X_test)
+
+# Calculate the accuracy of the k-NN classifier
+knn_accuracy = accuracy_score(y_test, knn_predictions)
+
+# Print the accuracy of each classifier
+print(f'Random Forest accuracy: {rf_accuracy:.2f}')
+print(f'SVM accuracy: {svm_accuracy:.2f}')
+print(f'k-NN accuracy: {knn_accuracy:.2f}')
+
+# Select the classifier with the highest accuracy
+best_clf = max(zip([rf_clf, svm_clf, knn_clf], [rf_accuracy, svm_accuracy, knn_accuracy]), key=lambda x: x[1])[0]
+print(f'Best classifier: {best_clf.__class__.__name__}')
